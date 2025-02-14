@@ -147,7 +147,7 @@ class HemOnc(DiseaseIndicationBase):
                     try:
                         year = self._id_to_yr(row[1])
                     except TypeError:
-                        _logger.error(
+                        _logger.exception(
                             "Failed parse of FDA approval year ID %s for HemOnc ID %s",
                             row[1],
                             row[0],
@@ -168,7 +168,7 @@ class HemOnc(DiseaseIndicationBase):
                         label = conditions[row[1]]
                     except KeyError:
                         # concept is deprecated or otherwise unavailable
-                        _logger.error(
+                        _logger.exception(
                             "Unable to process relation with indication %s -- deprecated?",
                             row[0],
                         )

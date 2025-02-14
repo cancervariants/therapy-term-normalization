@@ -217,13 +217,13 @@ def _compare_response(
     """
     if fixture and fixture_list:
         msg = "Args provided for both `fixture` and `fixture_list`"
-        raise Exception(msg)
+        pytest.fail(msg)
     if not fixture and not fixture_list:
         msg = "Must pass 1 of {fixture, fixture_list}"
-        raise Exception(msg)
+        pytest.fail(msg)
     if fixture and num_records:
         msg = "`num_records` should only be given with " "`fixture_list`."
-        raise Exception(msg)
+        pytest.fail(msg)
 
     assert response.match_type == match_type
     if fixture:

@@ -23,6 +23,7 @@ class Rules:
 
     def __init__(self, source_name: SourceName) -> None:
         """Initialize rules class.
+
         :param source_name: name of source to use, for filtering unneeded rules
         """
         rules_path = APP_ROOT / "etl" / "rules.csv"
@@ -40,6 +41,7 @@ class Rules:
     def apply_rules_to_therapy(self, therapy: dict) -> dict:
         """Apply all rules to therapy. First find relevant rules, then call the
         apply method.
+
         :param therapy: therapy object from ETL base
         :return: processed therapy object
         """
@@ -52,14 +54,16 @@ class Rules:
         self, therapy: dict, field: str, value: str | list | dict | int | float
     ) -> dict:
         """Given a (field, value) rule, apply it to the given therapy object.
+
         :param therapy: therapy object ready to load to DB
         :param field: name of object property field to check
         :param value: value to remove from field, if possible
         :return: therapy object with rule applied
+        :raise NotImplementedError: if unsupported field attempted
         """
         if field not in {"aliases", "trade_names", "xrefs", "associated_with"}:
             msg = "Non-scalar fields currently not implemented"
-            raise Exception(msg)
+            raise NotImplementedError(msg)
         field_data = set(therapy.get(field, []))
         if value in field_data:
             field_data.remove(value)

@@ -244,9 +244,9 @@ class Base(ABC):
         """
         try:
             Therapy(**therapy)
-        except ValidationError as e:
-            _logger.error("Attempted to load invalid therapy: %s", therapy)
-            raise e
+        except ValidationError:
+            _logger.exception("Attempted to load invalid therapy: %s", therapy)
+            raise
 
         therapy = self._rules.apply_rules_to_therapy(therapy)
         therapy = self._process_searchable_attributes(therapy)

@@ -1,6 +1,7 @@
 """Main application for FastAPI"""
 
 import html
+from typing import Annotated
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.openapi.utils import get_openapi
@@ -96,15 +97,14 @@ unmerged_normalize_description = (
     summary=get_matches_summary,
     operation_id="getQueryResponse",
     response_description=response_descr,
-    response_model=SearchService,
     response_model_exclude_none=True,
     description=search_description,
 )
 def search(
-    q: str = Query(..., description=q_descr),
-    incl: str | None = Query(None, description=incl_descr),
-    excl: str | None = Query(None, description=excl_descr),
-    infer_namespace: bool = Query(True, description=infer_descr),
+    q: Annotated[str, Query(..., description=q_descr)],
+    incl: Annotated[str | None, Query(None, description=incl_descr)],
+    excl: Annotated[str | None, Query(None, description=excl_descr)],
+    infer_namespace: Annotated[bool, Query(True, description=infer_descr)],
 ) -> SearchService:
     """For each source, return strongest-match concepts for query string
     provided by user.
@@ -134,13 +134,12 @@ def search(
     summary=merged_matches_summary,
     operation_id="getMergedRecord",
     response_description=merged_response_descr,
-    response_model=NormalizationService,
     response_model_exclude_none=True,
     description=normalize_description,
 )
 def normalize(
-    q: str = Query(..., description=normalize_q_descr),
-    infer_namespace: bool = Query(True, description=infer_descr),
+    q: Annotated[str, Query(..., description=normalize_q_descr)],
+    infer_namespace: Annotated[bool, Query(True, description=infer_descr)],
 ) -> NormalizationService:
     """Return merged strongest-match concept for query string provided by
     user.
@@ -162,12 +161,11 @@ def normalize(
     summary=unmerged_matches_summary,
     operation_id="getUnmergedRecords",
     response_description=unmerged_response_descr,
-    response_model=UnmergedNormalizationService,
     description=unmerged_normalize_description,
 )
 def normalize_unmerged(
-    q: str = Query(..., description=normalize_q_descr),
-    infer_namespace: bool = Query(True, description=infer_descr),
+    q: Annotated[str, Query(True, description=normalize_q_descr)],
+    infer_namespace: Annotated[bool, Query(True, description=infer_descr)],
 ) -> UnmergedNormalizationService:
     """Return all individual records associated with a normalized concept.
 

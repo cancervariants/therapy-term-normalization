@@ -13,11 +13,11 @@ from .rxnorm import RxNorm
 from .wikidata import Wikidata
 
 __all__ = [
-    "EtlError",
     "ChEMBL",
     "ChemIDplus",
     "DrugBank",
     "DrugsAtFDA",
+    "EtlError",
     "GuideToPHARMACOLOGY",
     "HemOnc",
     "Merge",

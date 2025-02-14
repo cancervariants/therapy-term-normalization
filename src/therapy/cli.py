@@ -103,13 +103,13 @@ def _load_source(
             f"Encountered ModuleNotFoundError attempting to import {e.name}. Are ETL dependencies installed?"
         )
         click.get_current_context().exit()
-    SourceClass = eval(name.value)  # noqa: N806 PGH001 S307
+    SourceClass = eval(name.value)  # noqa: N806, S307
 
     source = SourceClass(database=db, silent=False)
     try:
         processed_ids += source.perform_etl(use_existing)
     except EtlError as e:
-        _logger.error(e)
+        _logger.exception("Encountered ETL error while loading source %s", name)
         click.echo(f"Encountered error while loading {name}: {e}.")
         click.get_current_context().exit()
     end_load = timer()
@@ -260,13 +260,13 @@ def update_normalizer_db(
 
         if len(sources_split) == 0:
             msg = "Must enter 1 or more source names to update"
-            raise Exception(msg)
+            raise ValueError(msg)
 
         non_sources = set(sources_split) - set(SOURCES)
 
         if len(non_sources) != 0:
             msg = f"Not valid source(s): {non_sources}"
-            raise Exception(msg)
+            raise ValueError(msg)
 
         parsed_source_names = {SourceName(SOURCES[s]) for s in sources_split}
         if (
